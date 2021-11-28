@@ -40,6 +40,14 @@ export class AboutComponent {
         return newData;
     }
 
+    onReadDoc(){
+        this.db.doc("/courses/0ODSID5p1R1ta5B4vpwI").get()
+        .subscribe(snap => {
+           console.log(snap.id);
+           console.log(snap.data());
+        })
+    }
+
 
 }
 
