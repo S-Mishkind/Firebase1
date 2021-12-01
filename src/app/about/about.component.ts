@@ -50,18 +50,36 @@ export class AboutComponent {
     this.db
 
     /* query all courses */
-      /* .collection("courses") */
+     // .collection("courses")
      /*  query lessons in a specific course */
      /*  .collection("/courses/0ODSID5p1R1ta5B4vpwI/lessons") */
-      .collection("/courses/0ODSID5p1R1ta5B4vpwI/lessons",
+     /*  .collection("/courses/0ODSID5p1R1ta5B4vpwI/lessons", */
       /*   where seqNo == value less than 5 */
-      ref => ref.where("seqNo", "<=" , 5).orderBy("seqNo") 
-      ).get() 
+      /* ref => ref.where("seqNo", "<=" , 5).orderBy("seqNo")  )  */
+      .collection("courses",
+      ref => ref.where("seqNo", "<=" , 20)
+      .where("url", "==", "angular-forms-course")
+      .orderBy("seqNo")  
+      )
+      .get() 
       .subscribe((snaps) => {
         snaps.forEach((snap) => {
           console.log(snap.id);
           console.log(snap.data());
         });
       });
+  }
+
+  onReadCollectionGroup(){
+    this.db.collectionGroup("lessons",
+    ref => ref.where("seqNo", "==", 1))
+    .get()
+    .subscribe(snaps => {
+      snaps.forEach((snap) => {
+        console.log(snap.id);
+        console.log(snap.data());
+      });
+    });
+    
   }
 }
