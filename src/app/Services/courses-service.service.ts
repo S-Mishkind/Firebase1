@@ -1,24 +1,31 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { Course } from '../model/course';
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { Injectable } from "@angular/core";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { Course } from "../model/course";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CoursesServiceService {
-
-  constructor(private db: AngularFirestore) { 
-
-  }
+  constructor(private db: AngularFirestore) {}
 
   loadCoursesByCategory(category: string): Observable<Course[]> {
-this.db.collection(
-  "courses", 
-  ref => ref.where("categories", "array-contains", category)
-  .orderBy("seqNo")
-  )
-  .get()
+   return  this.db
+      .collection("courses", (ref) =>
+        ref.where("categories", "array-contains", category).orderBy("seqNo")
+      )
+      .get()
+      .pipe(
+        map((results) => {
+          return results.docs.map((snap) => {
+            return {
+              id: snap.id,
+              ...(<any>snap.data()),
+            };
+          });
+        })
+      );
   }
 }
