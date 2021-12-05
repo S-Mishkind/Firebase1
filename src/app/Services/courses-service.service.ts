@@ -4,6 +4,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Course } from "../model/course";
+import { convertSnaps } from "./db-utils.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,14 +19,7 @@ export class CoursesServiceService {
       )
       .get()
       .pipe(
-        map((results) => {
-          return results.docs.map((snap) => {
-            return {
-              id: snap.id,
-              ...(<any>snap.data()),
-            };
-          });
-        })
+        map(result => convertSnaps<Course>(result))
       );
   }
 }
