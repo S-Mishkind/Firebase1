@@ -1,3 +1,14 @@
+## http://localhost:4000/
+## firebase emulators:start --only firestore
+
+ ##  firebase emulators:export sample-courses
+ ##  firebase emulators:start --import sample-courses
+ ##  firebase emulators:start --only firestore --import test-data
+
+
+ ##  npm run local-dev
+
+
 
 ## Firebase & AngularFire In Depth 
 

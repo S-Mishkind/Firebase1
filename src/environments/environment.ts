@@ -4,8 +4,14 @@
 
 export const environment = {
   production: false,
+  useEmulators: true,
   firebase: {
-
+    apiKey: "AIzaSyB-rmzkgVtmH0yBPtCcow1qCGVYHnUFkfk",
+    authDomain: "ang-univ-firebase-course.firebaseapp.com",
+    projectId: "ang-univ-firebase-course",
+    storageBucket: "ang-univ-firebase-course.appspot.com",
+    messagingSenderId: "358384793732",
+    appId: "1:358384793732:web:062d31a879454fa5f2aad1"
   },
   api: {
 
