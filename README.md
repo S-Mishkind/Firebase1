@@ -6,6 +6,9 @@
  ##  firebase emulators:start --only firestore --import test-data
 
 
+ ##  npm run local-dev
+
+
 
 ## Firebase & AngularFire In Depth 
 
