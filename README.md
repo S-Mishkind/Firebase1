@@ -1,3 +1,7 @@
+## http://localhost:4000/
+## firebase emulators:start --only firestore
+
+
 
 ## Firebase & AngularFire In Depth 
 
