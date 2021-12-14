@@ -1,7 +1,7 @@
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { from, Observable } from "rxjs";
+import { from, observable, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { Course } from "../model/course";
 import { convertSnaps } from "./db-utils.service";
@@ -11,6 +11,12 @@ import { convertSnaps } from "./db-utils.service";
 })
 export class CoursesServiceService {
   constructor(private db: AngularFirestore) {}
+
+  deleteCourse(courseId: string){
+    /* from converts promise to observable */
+    return from(this.db.doc(`courses/${courseId}`).delete())
+
+  }
 
   updateCourse(courseId: string, changes: Partial<Course>): Observable<any>{
 

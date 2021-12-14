@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { inject } from "@angular/core/testing";
+import { CoursesServiceService } from "../Services/courses-service.service";
 
 @Component({
   selector: "edit-course-dialog",
@@ -19,6 +20,7 @@ export class EditCourseDialogComponent {
       private dialogRef: MatDialogRef<EditCourseDialogComponent>,
       private fb: FormBuilder,
       @Inject(MAT_DIALOG_DATA) course: Course,
+      private coursesService: CoursesServiceService
 
     )
      {
@@ -32,5 +34,14 @@ export class EditCourseDialogComponent {
 
   close() {
     this.dialogRef.close();
+  }
+
+  save(){
+    const changes = this.form.value;
+    this.coursesService.updateCourse(this.course.id, changes)
+    .subscribe(() => {
+      this.dialogRef.close(changes);
+    });
+
   }
 }
