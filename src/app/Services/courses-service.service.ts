@@ -4,6 +4,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { from, observable, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { Course } from "../model/course";
+import { Lesson } from "../model/lesson";
 import { convertSnaps } from "./db-utils.service";
 
 @Injectable({
@@ -12,16 +13,39 @@ import { convertSnaps } from "./db-utils.service";
 export class CoursesServiceService {
   constructor(private db: AngularFirestore) {}
 
-  deleteCourse(courseId: string){
-    /* from converts promise to observable */
-    return from(this.db.doc(`courses/${courseId}`).delete())
+  deleteCourseAndLessons(courseId: string) {
+    return this.db
+      .collection(`courses/${courseId}/lessons`)
+      .get()
+      .pipe(
+        concatMap((results) => {
+          const lessons = convertSnaps<Lesson>(results);
 
+          const batch = this.db.firestore.batch();
+
+          const courseRef = this.db.doc(`courses/${courseId}`).ref;
+
+          batch.delete(courseRef);
+
+          for (let lesson of lessons) {
+            const lessonRef = this.db.doc(
+              `courses/${courseId}/lessons/${lesson.id}`
+            ).ref;
+            batch.delete(lessonRef);
+          }
+
+          return from(batch.commit());
+        })
+      );
   }
 
-  updateCourse(courseId: string, changes: Partial<Course>): Observable<any>{
+  deleteCourse(courseId: string) {
+    /* from converts promise to observable */
+    return from(this.db.doc(`courses/${courseId}`).delete());
+  }
 
-   return from(this.db.doc(`courses/${courseId}`).update(changes));
-
+  updateCourse(courseId: string, changes: Partial<Course>): Observable<any> {
+    return from(this.db.doc(`courses/${courseId}`).update(changes));
   }
 
   createCourse(newCourse: Partial<Course>, courseId?: string) {
