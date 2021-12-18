@@ -13,6 +13,10 @@ import { convertSnaps } from "./db-utils.service";
 export class CoursesServiceService {
   constructor(private db: AngularFirestore) {}
 
+  findCourseByUrl(courseUrl: string){
+
+  }
+
   deleteCourseAndLessons(courseId: string) {
     return this.db
       .collection(`courses/${courseId}/lessons`)
