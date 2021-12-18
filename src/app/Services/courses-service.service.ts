@@ -1,17 +1,37 @@
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
+import { AngularFirestore} from "@angular/fire/firestore";
 import { from, observable, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
 import { Course } from "../model/course";
 import { Lesson } from "../model/lesson";
 import { convertSnaps } from "./db-utils.service";
+import firebase from "firebase";
+import  OrderByDirection = firebase.firestore.OrderByDirection; 
 
 @Injectable({
   providedIn: "root",
 })
 export class CoursesServiceService {
   constructor(private db: AngularFirestore) {}
+
+  findLessons(
+    courseId: string,
+    sortOrder: OrderByDirection = "asc",
+    pageNumber = 0,
+    pageSize = 3
+  ): Observable<Lesson[]> {
+   return this.db.collection(`course/${courseId}/lessons`, (ref) =>
+      ref
+        .orderBy("seqNo", sortOrder)
+        .limit(pageSize)
+        .startAfter(pageNumber * pageSize)
+    )
+    .get()
+    .pipe(
+      map(results => convertSnaps<Lesson>(results))
+    )
+  }
 
   findCourseByUrl(courseUrl: string): Observable<Course | null> {
     return this.db
